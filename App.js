@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React,{useEffect,useState} from 'react';
 import { Text, View, StyleSheet, SafeAreaView, TextInput, Platform, StatusBar, ScrollView, Image } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -10,8 +10,36 @@ import { Avatar } from 'react-native-elements';
 import Featured from './screens/components/Featured';
 import VideoPlayer from './screens/components/VideoPlayer';
 
+function truncate(str, n){
+  return (str.length > n) ? str.substr(0, n-1) + '...' : str;
+};
+
+
+const getFeaturedVideosAsync = async () => {
+  try {
+    let response = await fetch(
+      'https://learningfunction.azurewebsites.net/api/HttpTrigger1?code=tSWUB6h0V0OgLaTCf/A9MLEaILbU0E2gaVFBvUyyC4m/cdmwdgiGaQ=='
+    );
+    let json = await response.json();
+    //console.log(json)
+    return json;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 function Feed({navigation}) {
 
+  const [list, setList] = useState([]);
+
+  useEffect(() => {
+    console.log("Got activated")
+    getFeaturedVideosAsync().then((result) => {
+      setList(result)
+    })
+    
+   // setList("Yummy")
+  }, [])
 
   let startHeaderHeight = 80
 
@@ -28,7 +56,7 @@ function Feed({navigation}) {
   return (
 
     <SafeAreaView style={styles.AndroidSafeArea} >
-
+     
       <LinearGradient
         colors={['#edf3ff', 'white']}
         style={styles.container}
@@ -51,11 +79,13 @@ function Feed({navigation}) {
                 What do you want to learn today, Mani ?
               </Text>
               <View style={{ height: 130, marginTop: 20 }}>
-                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}> 
-                  <Featured imageUri={require("./assets/home.jpg")} name="Home" onPress={ () =>  navigation.navigate('Video Player') } />
-                  <Featured imageUri={require("./assets/home.jpg")} name="Experience" />
-                  <Featured imageUri={require("./assets/home.jpg")} name="Restaurant" />
-
+                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                  {list.map(x => {
+                    return(
+                  <Featured key={x._id} imageUri={{uri:x.thumbnail}} rating={parseInt(x.rating)} name={truncate(x.title,14)} onPress={ () =>  navigation.navigate('Video Player', {param: x.url}) } />  
+                    )
+                  })} 
+                
                 </ScrollView>
               </View>
               <View style={{ marginTop: 40, paddingHorizontal: 20 }}>

@@ -5,8 +5,9 @@ export default class VideoPlayer extends Component {
     render() {
         return (
             <View>
+                {console.log(this.props.route.params.param)}
                 <Video
-                source={require('../../assets/video.mp4')}
+                source={{uri:this.props.route.params.param}}
                 rate={1.0}
                 volume={1.0}
                 isMuted={false}
