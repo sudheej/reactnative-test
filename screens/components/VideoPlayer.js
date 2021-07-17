@@ -5,7 +5,6 @@ export default class VideoPlayer extends Component {
     render() {
         return (
             <View>
-                {console.log(this.props.route.params.param)}
                 <Video
                 source={{uri:this.props.route.params.param}}
                 rate={1.0}

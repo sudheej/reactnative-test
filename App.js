@@ -1,5 +1,5 @@
 import React,{useEffect,useState} from 'react';
-import { Text, View, StyleSheet, SafeAreaView, TextInput, Platform, StatusBar, ScrollView, Image } from 'react-native';
+import { Text, View, StyleSheet, SafeAreaView, TextInput, Platform, StatusBar, ScrollView, Image,FlatList, TouchableWithoutFeedback } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -9,6 +9,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { Avatar } from 'react-native-elements';
 import Featured from './screens/components/Featured';
 import VideoPlayer from './screens/components/VideoPlayer';
+import DetailedVideo from './screens/components/DetailedVideo';
 
 function truncate(str, n){
   return (str.length > n) ? str.substr(0, n-1) + '...' : str;
@@ -58,15 +59,15 @@ function Feed({navigation}) {
     <SafeAreaView style={styles.AndroidSafeArea} >
      
       <LinearGradient
-        colors={['#edf3ff', 'white']}
+        colors={['#f2f2f7', '#f2f2f7']}
         style={styles.container}
         start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
+        end={{ x: 3, y: 3 }}
       >
         <View style={{ flex: 1 }}>
-          <ScrollView scrollEventThrottle={16}>
+   
             <View>
-              <View style={{ flexDirection: 'row', justifyContent: 'flex-end', paddingTop: 20 }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'flex-end', paddingTop: 20, marginRight: 25 }}>
                 <Avatar
                   rounded
                   source={{
@@ -75,6 +76,7 @@ function Feed({navigation}) {
                   }}
                 />
               </View>
+              <Image source={require('./assets/logo.png')} style={{position:'absolute',height:50,width:175, marginTop:15, marginLeft:10}}/> 
               <Text style={{ fontSize: 24, textAlign: 'left', alignItems: 'flex-end', color: '#0b0e34', fontWeight: '700', paddingHorizontal: 20, paddingTop: 20 }}>
                 What do you want to learn today, Mani ?
               </Text>
@@ -88,12 +90,24 @@ function Feed({navigation}) {
                 
                 </ScrollView>
               </View>
-              <View style={{ marginTop: 40, paddingHorizontal: 20 }}>
-                <Text style={{ fontSize: 24, fontWeight: '700' }}>Continue from where you have left</Text>
+              <View style={{ marginTop: 33, paddingHorizontal: 20 }}>
+                <Text style={{ fontSize: 24, fontWeight: '700' }}>Picked for you</Text>
               </View>
+
+             
             </View>
 
-          </ScrollView>
+   
+
+          <FlatList
+               keyExtractor={(item) => item._id}
+               style={{marginTop:10}}
+               data={list}
+                renderItem={({item}) => (
+               
+                  <DetailedVideo onPress={ () =>  navigation.navigate('Video Player', {param: item.url}) } imageUri={item.thumbnail} title={item.title}/>
+             
+                )} />
 
         </View>
 
@@ -126,8 +140,14 @@ function MyTabs() {
     <Tab.Navigator
       initialRouteName="Explore"
       tabBarOptions={{
-        activeTintColor: '#0b0e34',
-        inactiveTintColor: '#7d80a8'
+        style: {
+          backgroundColor: 'white',
+          borderTopWidth: 0,
+          position: 'absolute',
+        },
+        activeTintColor: '#0a84ff',
+        inactiveTintColor: '#8e8e93'
+
       }}
     >
       <Tab.Screen

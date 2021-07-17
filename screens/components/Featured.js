@@ -6,6 +6,7 @@ import {
     Image,
     TouchableWithoutFeedback
 } from "react-native"
+import { AntDesign } from '@expo/vector-icons';
 import StarRating from 'react-native-star-rating';
 import { height } from 'styled-system';
 
@@ -22,7 +23,9 @@ class Featured extends Component {
           <Image source={this.props.imageUri} 
           style ={{flex:1,width:null,height:null, resizeMode:'cover', position:'relative'}}
           />
-           <Image source={require('../../assets/playicon.png')} style={{marginLeft:35,marginTop:10,height:50,width:50,position:'absolute',alignContent:'center', opacity:0.7}} />
+          <Image source={require('../../assets/playicon.png')} style={{marginLeft:40,marginTop:10,height:50,width:50,position:'absolute',alignContent:'center', opacity: 1}} />
+        {/*  <AntDesign name="playcircleo" size={40} iconStyle={{opacity:0.5}} style={{marginLeft:40,marginTop:10,height:50,width:50,position:'absolute',alignContent:'center', opacity:0.7}} /> */}
+         
         </View>
         <View style={{flex:0, paddingLeft: 10, paddingTop:10}}>
           <Text>{this.props.name}</Text>
